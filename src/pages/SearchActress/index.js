@@ -16,16 +16,19 @@ export default (props) => {
   const [actressProfile, setActressProfile] = React.useState(null);
   const [loading, setLoading] = React.useState(true);
 
-  const handleClickHistoryName = (name) => {
+  const handleClickHistoryName = async (name) => {
     setVideos([]);
     setLoading(true);
-    api.searchByActress({ actress: name, withProfile: "false" }).then((rsp) => {
+    try {
+      const rsp = await api.searchByActress({ actress: name, withProfile: "false" });
       if (rsp) {
-        setVideos(rsp.data);
+        setVideos(rsp.videos);
       }
-    }).finally(() => {
+    } catch (err) {
+      console.error(err)
+    } finally {
       setLoading(false);
-    })
+    }
   }
 
   const renderActressProfile = () => {
@@ -54,7 +57,6 @@ export default (props) => {
   }
 
   const renderVideos = () => {
-    console.log(loading, videos);
     if (loading) {
       return <></>
     } else if (!videos || videos.length === 0) {

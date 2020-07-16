@@ -10,12 +10,13 @@ export default () => {
   const classes = useStyles();
 
   function handleSearch() {
-    if (input.trim() === "") {
+    const kw = input.trim();
+    if (kw === "") {
       return
     }
-    window.location.href = input.includes("-") ?
-      `/#/search/video?code=${input.trim()}` :
-      `/#/search/actress?actress=${input.trim()}&history_name=true`;
+    window.location.href = /\d/.test(kw) ?
+      `/#/search/video?code=${kw}` :
+      `/#/search/actress?actress=${kw}&history_name=true`;
   }
 
   function handleGoHome() {
@@ -37,7 +38,6 @@ export default () => {
       <InputBase
         className={classes.input}
         placeholder="Search..."
-        inputProps={{ 'aria-label': 'search' }}
         value={input}
         onChange={event => { setInput(event.target.value); }}
         onKeyPress={(e) => {
