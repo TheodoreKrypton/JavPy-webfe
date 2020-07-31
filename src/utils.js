@@ -1,4 +1,4 @@
-import { useLocation } from "react-router-dom";
+import { useLocation } from 'react-router-dom';
 
 function useQuery() {
   return new URLSearchParams(useLocation().search);
@@ -8,25 +8,25 @@ const globalCache = {
   page: {
     new: {
       page: 1,
-      videosRendered: []
+      videos: [],
     },
     searchActress: {
       page: 1,
-      videosRendered: []
-    }
+      videos: [],
+    },
   },
   actress: {
     videos: {},
     actressProfile: {},
-    historyNames: {}
+    historyNames: {},
   },
-  videos: {}
+  videos: {},
 };
 
 function getDocumentTop() {
-  let scrollTop = 0,
-    bodyScrollTop = 0,
-    documentScrollTop = 0;
+  let scrollTop = 0;
+  let bodyScrollTop = 0;
+  let documentScrollTop = 0;
 
   if (document.body) {
     bodyScrollTop = document.body.scrollTop;
@@ -36,16 +36,15 @@ function getDocumentTop() {
     documentScrollTop = document.documentElement.scrollTop;
   }
 
-  scrollTop =
-    bodyScrollTop - documentScrollTop > 0
-      ? bodyScrollTop
-      : documentScrollTop;
+  scrollTop = bodyScrollTop - documentScrollTop > 0
+    ? bodyScrollTop
+    : documentScrollTop;
   return scrollTop;
 }
 
 function getWindowHeight() {
   let windowHeight = 0;
-  if (document.compatMode === "CSS1Compat") {
+  if (document.compatMode === 'CSS1Compat') {
     windowHeight = document.documentElement.clientHeight;
   } else {
     windowHeight = document.body.clientHeight;
@@ -55,9 +54,9 @@ function getWindowHeight() {
 }
 
 function getScrollHeight() {
-  let scrollHeight = 0,
-    bodyScrollHeight = 0,
-    documentScrollHeight = 0;
+  let scrollHeight = 0;
+  let bodyScrollHeight = 0;
+  let documentScrollHeight = 0;
 
   if (document.body) {
     bodyScrollHeight = document.body.scrollHeight;
@@ -66,21 +65,21 @@ function getScrollHeight() {
   if (document.documentElement) {
     documentScrollHeight = document.documentElement.scrollHeight;
   }
-  scrollHeight =
-    bodyScrollHeight - documentScrollHeight > 0
-      ? bodyScrollHeight
-      : documentScrollHeight;
+  scrollHeight = bodyScrollHeight - documentScrollHeight > 0
+    ? bodyScrollHeight
+    : documentScrollHeight;
   return scrollHeight;
 }
 
 const debounce = (func, delay) => {
-  let inDebounce
-  return function () {
-    const context = this
-    const args = arguments
-    clearTimeout(inDebounce)
-    inDebounce = setTimeout(() => func.apply(context, args), delay)
-  }
-}
+  let inDebounce;
+  return (...args) => {
+    const context = this;
+    clearTimeout(inDebounce);
+    inDebounce = setTimeout(() => func.apply(context, args), delay);
+  };
+};
 
-export default { useQuery, globalCache, getDocumentTop, getScrollHeight, getWindowHeight, debounce };
+export default {
+  useQuery, globalCache, getDocumentTop, getScrollHeight, getWindowHeight, debounce,
+};

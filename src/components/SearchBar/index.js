@@ -1,29 +1,29 @@
 import React from 'react';
-import useStyles from './styles'
 import IconButton from '@material-ui/core/IconButton';
 import InputBase from '@material-ui/core/InputBase';
 import HomeIcon from '@material-ui/icons/Home';
 import SearchIcon from '@material-ui/icons/Search';
 import Paper from '@material-ui/core/Paper';
+import useStyles from './styles';
 
 export default () => {
   const classes = useStyles();
 
+  const [input, setInput] = React.useState('');
+
   function handleSearch() {
     const kw = input.trim();
-    if (kw === "") {
-      return
+    if (kw === '') {
+      return;
     }
-    window.location.href = /\d/.test(kw) ?
-      `/#/search/video?code=${kw}` :
-      `/#/search/actress?actress=${kw}&history_name=true`;
+    window.location.href = /\d/.test(kw)
+      ? `/#/search/video?code=${kw}`
+      : `/#/search/actress?actress=${kw}&history_name=true`;
   }
 
   function handleGoHome() {
-    window.location.href = "/"
+    window.location.href = '/';
   }
-
-  const [input, setInput] = React.useState("");
 
   return (
     <Paper className={classes.root}>
@@ -31,7 +31,7 @@ export default () => {
         aria-label="home"
         component="span"
         className={classes.iconButton}
-        onClick={() => { handleGoHome() }}
+        onClick={() => { handleGoHome(); }}
       >
         <HomeIcon />
       </IconButton>
@@ -39,10 +39,10 @@ export default () => {
         className={classes.input}
         placeholder="Search..."
         value={input}
-        onChange={event => { setInput(event.target.value); }}
+        onChange={(event) => { setInput(event.target.value); }}
         onKeyPress={(e) => {
           if (e.key === 'Enter') {
-            handleSearch()
+            handleSearch();
           }
         }}
       />
@@ -51,4 +51,4 @@ export default () => {
       </IconButton>
     </Paper>
   );
-}
+};

@@ -1,11 +1,16 @@
 import React from 'react';
-import Videos from '../../components/Videos';
+import ScrollableVideos from '../../components/ScrollableVideos';
 import api from '../../api';
 import utils from '../../utils';
 
+export default () => {
+  const loadNextPage = ({ page }) => new Promise((resolve) => {
+    api.ws.getNewlyReleased({ page }).onArrival((rsp) => {
+      resolve(rsp);
+    });
+  });
 
-export default (props) => {
   return (
-    <Videos loadNextPage={api.getNewlyReleased} initialState={utils.globalCache.page.new}></Videos>
-  )
-}
+    <ScrollableVideos loadNextPage={loadNextPage} initialState={utils.globalCache.page.new} />
+  );
+};

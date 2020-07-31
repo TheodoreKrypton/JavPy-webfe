@@ -30,10 +30,11 @@ export default class HLSSource extends Component {
   }
 
   render() {
+    const { src, type } = this.props;
     return (
       <source
-        src={this.props.src}
-        type={this.props.type || 'application/x-mpegURL'}
+        src={src}
+        type={type || 'application/x-mpegURL'}
       />
     );
   }

@@ -9,7 +9,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import api from '../../api';
 
 export default () => {
-  const [input, setInput] = React.useState("");
+  const [input, setInput] = React.useState('');
   const [open, setOpen] = React.useState(!api.hasUserpass());
 
   const handleProceed = () => {
@@ -18,16 +18,16 @@ export default () => {
         setOpen(false);
         window.location.reload();
       }
-    })
+    });
   };
 
   return (
-    <React.Fragment>
+    <>
       <Dialog open={open} onClose={handleProceed}>
         <DialogTitle>Login Required</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            Leave it blank if you didn't set a password.
+            Leave it blank if you did not set a password.
           </DialogContentText>
           <TextField
             autoFocus
@@ -36,7 +36,7 @@ export default () => {
             type="password"
             color="secondary"
             value={input}
-            onChange={event => { setInput(event.target.value); }}
+            onChange={(event) => { setInput(event.target.value); }}
             fullWidth
           />
         </DialogContent>
@@ -46,6 +46,6 @@ export default () => {
           </Button>
         </DialogActions>
       </Dialog>
-    </React.Fragment>
+    </>
   );
-}
+};

@@ -7,15 +7,14 @@ import useStyles from './styles';
 
 const formatDate = (date) => {
   if (!date) {
-    return ""
+    return '';
   }
-  date = new Date(date);
-  const ye = new Intl.DateTimeFormat('en', { year: 'numeric' }).format(date)
-  const mo = new Intl.DateTimeFormat('en', { month: 'numeric' }).format(date)
-  const da = new Intl.DateTimeFormat('en', { day: '2-digit' }).format(date)
-  return `${da}/${mo}/${ye}`
-}
-
+  const d = new Date(date);
+  const ye = new Intl.DateTimeFormat('en', { year: 'numeric' }).format(d);
+  const mo = new Intl.DateTimeFormat('en', { month: 'numeric' }).format(d);
+  const da = new Intl.DateTimeFormat('en', { day: '2-digit' }).format(d);
+  return `${da}/${mo}/${ye}`;
+};
 
 export default (props) => {
   const classes = useStyles();
@@ -23,7 +22,7 @@ export default (props) => {
   const { name, profile } = props;
 
   if (!profile) {
-    return <></>
+    return <></>;
   }
 
   return (
@@ -34,13 +33,19 @@ export default (props) => {
             {name}
           </Typography>
           <Typography variant="subtitle1" color="textSecondary">
-            Birthdate: {formatDate(profile.birth_date)}
+            Birthdate:
+            {' '}
+            {formatDate(profile.birth_date)}
           </Typography>
           <Typography variant="subtitle1" color="textSecondary">
-            Height: {profile.height}
+            Height:
+            {' '}
+            {profile.height}
           </Typography>
           <Typography variant="subtitle1" color="textSecondary">
-            Weight: {profile.weight}
+            Weight:
+            {' '}
+            {profile.weight}
           </Typography>
         </CardContent>
       </div>
@@ -51,4 +56,4 @@ export default (props) => {
       />
     </Card>
   );
-}
+};

@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import React from 'react';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
@@ -6,7 +7,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import IconButton from '@material-ui/core/IconButton';
 import SettingsIcon from '@material-ui/icons/Settings';
-import ReactJson from 'react-json-view'
+import ReactJson from 'react-json-view';
 import api from '../../api';
 
 export default () => {
@@ -24,36 +25,42 @@ export default () => {
   const handleConfirm = () => {
     api.updateConfigurations(json).finally(() => {
       setOpen(false);
-    })
+    });
   };
 
   React.useEffect(() => {
     api.getConfigurations().then((rsp) => {
-      setJson(rsp)
-    })
-  }, [open])
+      setJson(rsp);
+    });
+  }, [open]);
 
-  const edit = ({ updated_src, name, namespace, new_value, existing_value }) => {
+  const edit = ({
+    updated_src,
+  }) => {
     setJson(updated_src);
-  }
+  };
 
-  const add = ({ updated_src, name, namespace, new_value, existing_value }) => {
+  const add = ({
+    updated_src,
+  }) => {
     setJson(updated_src);
-  }
+  };
 
-  const del = ({ updated_src, name, namespace, new_value, existing_value }) => {
+  const del = ({
+    updated_src,
+  }) => {
     setJson(updated_src);
-  }
+  };
 
   return (
     <div>
       <IconButton onClick={handleClickOpen}>
-        <SettingsIcon></SettingsIcon>
+        <SettingsIcon />
       </IconButton>
       <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title" fullWidth>
         <DialogTitle id="form-dialog-title">Configurations</DialogTitle>
         <DialogContent>
-          {json ? <ReactJson src={json} onEdit={edit} onDelete={del} onAdd={add} theme="solarized"></ReactJson> : <></>}
+          {json ? <ReactJson src={json} onEdit={edit} onDelete={del} onAdd={add} theme="solarized" /> : <></>}
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>
@@ -66,4 +73,4 @@ export default () => {
       </Dialog>
     </div>
   );
-}
+};

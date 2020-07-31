@@ -1,5 +1,4 @@
 import React from 'react';
-import useStyles from './styles'
 import Card from '@material-ui/core/Card';
 import CardActionArea from '@material-ui/core/CardActionArea';
 import CardActions from '@material-ui/core/CardActions';
@@ -12,16 +11,17 @@ import MenuItem from '@material-ui/core/MenuItem';
 import { useHistory } from 'react-router-dom';
 import LazyLoad from 'react-lazyload';
 import Chip from '@material-ui/core/Chip';
-import api from '../../../api';
+import useStyles from './styles';
+import api from '../../api';
 
-export default props => {
+export default (props) => {
   const classes = useStyles();
   const history = useHistory();
   const { video } = props;
 
   const [anchorEl, setAnchorEl] = React.useState(null);
 
-  const handleMultipleClick = event => {
+  const handleMultipleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
 
@@ -31,63 +31,66 @@ export default props => {
 
   const handleActressClick = (actress) => {
     history.push(`/search/actress?actress=${actress}`);
-    window.location.reload();
-  }
+  };
 
-  const handleVideoClick = (video) => {
-    if (video.video_url) {
-      if (video.video_url.endsWith(".m3u8") || video.video_url.endsWith(".mp4")) {
-        window.open(`${api.address}/#/videoplayer?video_url=${video.video_url}`);
-      } else if (video.video_url.includes("hydrax.net")) {
-        window.open(`${api.address}/#/iframe?video_url=${video.video_url}`);
+  const handleVideoClick = (v) => {
+    if (v.video_url) {
+      if (v.video_url.endsWith('.m3u8') || v.video_url.endsWith('.mp4')) {
+        window.open(`${api.address}/#/videoplayer?video_url=${v.video_url}`);
+      } else if (v.video_url.includes('hydrax.net')) {
+        window.open(`${api.address}/#/iframe?video_url=${v.video_url}`);
       } else {
-        window.open(`${api.address}/redirect_to?url=${video.video_url}`);
+        window.open(`${api.address}/redirect_to?url=${v.video_url}`);
       }
     } else {
-      history.push(`/search/video?code=${video.code}`);
+      history.push(`/search/video?code=${v.code}`);
     }
-  }
+  };
 
   const handleMagnetClick = (code) => {
     history.push(`/search/magnet?code=${code}`);
-  }
+  };
 
   const renderActress = (actress) => {
-    if (!actress) {
+    if (!actress || actress.length === 0) {
       return (
         <Button size="small" color="secondary" disabled>
           Unknown
         </Button>
-      )
-    } else if (actress.includes(",")) {
-      return (
-        <>
-          <Button size="small" aria-haspopup="true" color="secondary" onClick={handleMultipleClick}>
-            Expand
-          </Button>
-          <Menu
-            anchorEl={anchorEl}
-            open={Boolean(anchorEl)}
-            onClose={handleMultipleClose}
-          >
-            {actress.split(",").map((x, i) => {
-              return <MenuItem key={i.toString()} onClick={() => handleActressClick(x.trim())}>{x.trim()}</MenuItem>
-            })}
-          </Menu>
-        </>
       );
-    } else {
+    } if (actress.length === 1) {
       return (
         <Button size="small" color="secondary" onClick={() => handleActressClick(video.actress)}>
           {video.actress}
         </Button>
       );
     }
-  }
+    return (
+      <>
+        <Button size="small" aria-haspopup="true" color="secondary" onClick={handleMultipleClick}>
+          Expand
+        </Button>
+        <Menu
+          anchorEl={anchorEl}
+          open={Boolean(anchorEl)}
+          onClose={handleMultipleClose}
+        >
+          {actress.map(
+            (x, i) => (
+              <MenuItem
+                key={i.toString()}
+                onClick={() => handleActressClick(x.trim())}
+              >
+                {x.trim()}
+              </MenuItem>
+            ),
+          )}
+        </Menu>
+      </>
+    );
+  };
 
-  const handleImageError = (event) => {
-
-  }
+  const getVideoUrlDomain = (url) => new URL(url).hostname;
 
   return (
     <Card className={classes.root}>
@@ -97,7 +100,6 @@ export default props => {
             component="img"
             className={classes.media}
             image={video.preview_img_url}
-            onError={handleImageError}
           />
         </LazyLoad>
         <CardContent className={classes.content}>
@@ -109,7 +111,6 @@ export default props => {
             {video.title}
           </Typography>
         </CardContent>
-
       </CardActionArea>
 
       <CardActions className={classes.bottom}>
@@ -117,7 +118,8 @@ export default props => {
         <Button size="small" color="secondary" onClick={() => handleMagnetClick(video.code)}>
           MAGNET
         </Button>
+        <span className={classes.source}>{video.video_url ? getVideoUrlDomain(video.video_url) : ''}</span>
       </CardActions>
-    </Card >
+    </Card>
   );
-}
+};
