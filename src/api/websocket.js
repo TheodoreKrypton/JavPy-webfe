@@ -43,14 +43,14 @@ class MessagePipe {
 }
 
 const searchByCode = ({ code }) => new MessagePipe({ api: 'search_by_code', args: { code } });
-
 const getNewlyReleased = ({ page }) => new MessagePipe({ api: 'get_newly_released', args: { page } });
-
 const searchByActress = ({ actress, withProfile }) => new MessagePipe({ api: 'search_by_actress', args: { actress, withProfile } });
+const searchMagnet = ({ code }) => new MessagePipe({ api: 'search_magnet_by_code', args: { code } });
 
 export default {
   searchByCode,
   connectionEstablished,
   getNewlyReleased,
   searchByActress,
+  searchMagnet,
 };

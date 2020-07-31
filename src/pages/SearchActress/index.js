@@ -16,7 +16,7 @@ export default () => {
   const [videosToRender, setvideosToRender] = React.useState([]);
   const [actressProfile, setActressProfile] = React.useState(null);
 
-  const onArrival = React.useCallback((rsp) => {
+  const onArrival = (rsp) => {
     if (Array.isArray(rsp)) {
       rsp.forEach((av) => {
         if (videos[av.code] === undefined) {
@@ -44,8 +44,7 @@ export default () => {
     setvideosToRender(Object.values(videos).sort(
       (v1, v2) => Date.parse(v2.release_date) - Date.parse(v1.release_date),
     ));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  };
 
   const onError = (reason) => {
     if (reason === 'not found') {
@@ -125,7 +124,8 @@ export default () => {
 
   React.useEffect(() => {
     api.ws.searchByActress({ actress, withProfile: 'true' }).onArrival(onArrival).onError(onError);
-  }, [actress, onArrival]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [actress]);
 
   return (
     <>

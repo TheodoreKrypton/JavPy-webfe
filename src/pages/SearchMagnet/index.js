@@ -1,6 +1,4 @@
 import React from 'react';
-import Async from 'react-async';
-import LinearProgress from '@material-ui/core/LinearProgress';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableContainer from '@material-ui/core/TableContainer';
@@ -20,8 +18,10 @@ new Clipboard('.btn');
 export default () => {
   const query = utils.useQuery();
 
-  function renderTable(data) {
-    if (!data) {
+  const [magnets, setMagnets] = React.useState([]);
+
+  const renderTable = () => {
+    if (!magnets) {
       return <Alert severity="error">Sorry. Cannot find the requested resources.</Alert>;
     }
     return (
@@ -39,7 +39,7 @@ export default () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {data.map((row) => (
+            {magnets.map((row) => (
               <styles.StyledTableRow key={row.name}>
                 <styles.StyledTableCell align="left">{row.description}</styles.StyledTableCell>
                 <styles.StyledTableCell align="left">
@@ -53,21 +53,14 @@ export default () => {
         </Table>
       </TableContainer>
     );
-  }
+  };
 
-  return (
-    <>
-      <Async promiseFn={api.searchMagnet} code={query.get('code')}>
-        <Async.Pending>
-          <LinearProgress color="secondary" />
-        </Async.Pending>
-        <Async.Fulfilled>
-          {(data) => (renderTable(data))}
-        </Async.Fulfilled>
-        <Async.Rejected>
-          Sorry. Nothing was found.
-        </Async.Rejected>
-      </Async>
-    </>
-  );
+  React.useEffect(() => {
+    const code = query.get('code');
+    api.ws.searchMagnet({ code }).onArrival((rsp) => {
+      setMagnets(rsp);
+    });
+  });
+
+  return renderTable();
 };

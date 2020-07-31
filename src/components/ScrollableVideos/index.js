@@ -7,22 +7,22 @@ export default (props) => {
   const [page, setPage] = React.useState(initialState.page);
   const [videos, setVideos] = React.useState(initialState.videos);
 
-  const load = React.useCallback(async () => {
-    const rsp = await loadNextPage({ page, videos });
+  const load = async () => {
+    const rsp = await loadNextPage({ page, videosRendered: videos });
     if (rsp) {
       const v = videos.concat(rsp);
       initialState.videos = v;
       setVideos(v);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [loadNextPage]);
+  };
 
   React.useEffect(() => {
     window.onwheel = utils.debounce(() => {
       initialState.scrollY = utils.getDocumentTop();
       if (loadNextPage && utils.getScrollHeight()
         === utils.getWindowHeight() + utils.getDocumentTop()) {
-        setPage(initialState.page + 1);
+        initialState.page += 1;
+        setPage(initialState.page);
       }
     }, 100);
 
