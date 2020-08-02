@@ -12,7 +12,7 @@ import theme from './theme';
 import SearchVideo from './pages/SearchVideo';
 import SearchActress from './pages/SearchActress';
 import SearchMagnet from './pages/SearchMagnet';
-// import Login from './pages/Login';
+import Login from './pages/Login';
 import VideoPlayer from './pages/VideoPlayer';
 import IFrame from './pages/IFrame';
 import TopArea from './components/TopArea';
@@ -28,7 +28,7 @@ const App = () => (
     <Route>
       <ThemeProvider theme={theme}>
         <div>
-          {/* <Login /> */}
+          <Login />
           <TopArea />
           <div style={{ position: 'absolute', top: 70, width: '100%' }}>
             <Switch>

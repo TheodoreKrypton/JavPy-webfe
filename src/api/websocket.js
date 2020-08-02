@@ -1,4 +1,5 @@
 import sha256 from 'js-sha256';
+import Cookie from 'js-cookie';
 
 const socket = new WebSocket('ws://localhost:8081/ws/');
 
@@ -28,7 +29,7 @@ class MessagePipe {
     this.lastUpdate = Date.now();
     this.reqId = sha256.sha256(`${message.api}${this.lastUpdate}`).slice(0, 10);
     pipes[this.reqId] = this;
-    socket.send(JSON.stringify({ message, reqId: this.reqId }));
+    socket.send(JSON.stringify({ message, reqId: this.reqId, userpass: Cookie.get('userpass') }));
   }
 
   onArrival(fn) {
