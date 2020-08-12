@@ -1,137 +1,106 @@
 import React from 'react';
-import Breadcrumbs from '@material-ui/core/Breadcrumbs';
-import Button from '@material-ui/core/Button';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import utils from '../../utils';
-import ScrollableVideos from '../../components/ScrollableVideos';
 import api from '../../api';
 import ActressProfile from '../../components/ActressProfile';
 import Error from '../../components/Error';
+import Aliases from '../../components/Aliases';
+import Videos from '../../components/Videos';
+
+const VIDEOS_PER_PAGE = 24;
+
+const sortVideos = (vs) => Object.values(vs).sort(
+  (v1, v2) => Date.parse(v2.release_date) - Date.parse(v1.release_date),
+);
+
+const videosByActress = {};
 
 export default () => {
   const query = utils.useQuery();
   const actress = query.get('actress');
+  const videosOfActress = React.useMemo(() => {
+    if (videosByActress[actress.toLowerCase()] === undefined) {
+      videosByActress[actress.toLowerCase()] = {};
+    }
+    return videosByActress[actress.toLowerCase()];
+  }, [actress]);
 
-  const [aliases, setAliases] = React.useState([]);
-  const [videos, setVideos] = React.useState({});
-  const [videosToRender, setvideosToRender] = React.useState([]);
-  const [actressProfile, setActressProfile] = React.useState(null);
+  const videosBuffer = React.useRef(sortVideos(videosOfActress));
+  const [videosRendered, setVideosRendered] = React.useState([]);
+  const loading = React.useRef(false);
 
-  const onArrival = (rsp) => {
-    if (Array.isArray(rsp)) {
-      rsp.forEach((av) => {
-        if (videos[av.code] === undefined) {
-          videos[av.code] = av;
+  const actressProfile = React.useMemo(() => <ActressProfile actress={actress} />, [actress]);
+  const aliases = React.useMemo(() => <Aliases actress={actress} />, [actress]);
+  const videos = React.useMemo(() => {
+    if (loading.current) {
+      return (
+        <div style={{ display: 'flex', justifyContent: 'center', marginTop: 20 }}>
+          <CircularProgress color="secondary" />
+        </div>
+      );
+    }
+    if (videosByActress[actress.toLowerCase()] === null) {
+      return <Error />;
+    }
+    return <Videos videos={videosRendered} />;
+  }, [actress, videosRendered]);
+
+  const nextPage = React.useCallback(() => {
+    setVideosRendered((vr) => videosBuffer.current.slice(0, vr.length + VIDEOS_PER_PAGE));
+  }, []);
+
+  React.useEffect(() => {
+    setVideosRendered([]);
+  }, [actress]);
+
+  React.useEffect(() => {
+    if (loading.current) {
+      return;
+    }
+    loading.current = true;
+    api.ws.searchByActress({ actress }).onArrival((rsp) => {
+      rsp.forEach((video) => {
+        if (!videosOfActress[video.code]) {
+          videosOfActress[video.code] = video;
         } else {
-          Object.keys(av).forEach((key) => {
-            if (videos[av.code].actress.length === 0) {
-              videos[av.code].actress = av.actress;
+          Object.keys(video).forEach((key) => {
+            if (videosOfActress[video.code].actress.length === 0) {
+              videosOfActress[video.code].actress = video.actress;
             }
-            if (!videos[av.code][key]) {
-              videos[av.code][key] = av[key];
+            if (!videosOfActress[video.code][key]) {
+              videosOfActress[video.code][key] = video[key];
             }
           });
         }
       });
-    } else {
-      setActressProfile(rsp);
-      const set = new Set(aliases);
-      rsp.aliases.forEach((alias) => {
-        set.add(alias);
-      });
-      setAliases([...set].sort());
-    }
-
-    setvideosToRender(Object.values(videos).sort(
-      (v1, v2) => Date.parse(v2.release_date) - Date.parse(v1.release_date),
-    ));
-  };
-
-  const onError = (reason) => {
-    if (reason === 'not found') {
-      setVideos(null);
-    }
-  };
-
-  const handleClickHistoryName = (name) => {
-    setvideosToRender([]);
-    setVideos({});
-    api.ws.searchByActress({ actress: name, withProfile: 'false' }).onArrival(onArrival).onError(onError);
-  };
-
-  const renderActressProfile = () => <ActressProfile profile={actressProfile} name={query.get('actress')} />;
-
-  const renderHistoryNames = () => (
-    <div style={{
-      display: 'table',
-      margin: '0 auto',
-    }}
-    >
-      <Breadcrumbs>
-        {aliases.map((name, i) => (
-          <Button key={i.toString()} color="secondary" onClick={() => { handleClickHistoryName(name.trim()); }}>
-            {name.trim()}
-          </Button>
-        ))}
-      </Breadcrumbs>
-    </div>
-  );
-
-  const VIDEOS_PER_PAGE = 16;
-
-  const loadNextPage = ({ videosRendered }) => new Promise((resolve) => {
-    if (!videosToRender || !videosRendered) {
-      resolve([]);
-      return;
-    }
-    let ret = [];
-    if (videosRendered.length < VIDEOS_PER_PAGE) {
-      const displayed = {};
-      videosRendered.forEach((v) => {
-        displayed[v.code] = true;
-      });
-      for (let i = 0; i < videosToRender.length; i += 1) {
-        const v = videosToRender[i];
-        if (displayed[v.code] === undefined) {
-          ret.push(v);
-          if (ret.length + videosRendered.length >= VIDEOS_PER_PAGE) {
-            break;
-          }
-        }
+      videosBuffer.current = sortVideos(videosOfActress);
+      if (loading.current) {
+        loading.current = false;
+        nextPage();
       }
-    }
-    if (videosRendered.length !== 0) {
-      const videosCount = videosRendered.length + ret.length;
-      const nextPage = videosToRender.slice(videosCount, videosCount + VIDEOS_PER_PAGE);
-      ret = ret.concat(nextPage);
-    }
-    resolve(ret);
-  });
-
-  const renderVideos = () => {
-    if (videos === null) {
-      return <Error />;
-    }
-    if (videosToRender.length === 0) {
-      return <></>;
-    }
-    return (
-      <ScrollableVideos
-        initialState={utils.globalCache.page.searchActress}
-        loadNextPage={loadNextPage}
-      />
-    );
-  };
+    }).onError(() => {
+      videosByActress[actress.toLowerCase()] = null;
+      loading.current = false;
+    });
+  }, [actress, nextPage, videosOfActress]);
 
   React.useEffect(() => {
-    api.ws.searchByActress({ actress, withProfile: 'true' }).onArrival(onArrival).onError(onError);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [actress]);
+    window.onwheel = () => {
+      if (utils.onBottom()) {
+        nextPage();
+      }
+    };
+
+    return () => {
+      window.onwheel = null;
+    };
+  }, [nextPage]);
 
   return (
     <>
-      {actressProfile ? renderActressProfile() : <></>}
-      {aliases ? renderHistoryNames() : <></>}
-      {renderVideos()}
+      {actressProfile}
+      {aliases}
+      {videos}
     </>
   );
 };

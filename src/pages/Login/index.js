@@ -36,7 +36,7 @@ export default () => {
             type="password"
             color="secondary"
             value={input}
-            onChange={(event) => { setInput(event.target.value); }}
+            onChange={setInput}
             fullWidth
           />
         </DialogContent>

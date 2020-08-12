@@ -71,15 +71,9 @@ function getScrollHeight() {
   return scrollHeight;
 }
 
-const debounce = (func, delay) => {
-  let inDebounce;
-  return (...args) => {
-    const context = this;
-    clearTimeout(inDebounce);
-    inDebounce = setTimeout(() => func.apply(context, args), delay);
-  };
-};
+const onBottom = () => getScrollHeight()
+  === getWindowHeight() + getDocumentTop();
 
 export default {
-  useQuery, globalCache, getDocumentTop, getScrollHeight, getWindowHeight, debounce,
+  useQuery, globalCache, onBottom,
 };

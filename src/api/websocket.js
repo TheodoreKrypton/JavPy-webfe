@@ -18,9 +18,15 @@ socket.addEventListener('message', (event) => {
   pipe.lastUpdate = Date.now();
 
   if (response === 'not found') {
-    pipe.onerror('not found');
+    if (pipe.onerror) {
+      pipe.onerror('not found');
+    }
   } else if (pipe.onarrival) {
     pipe.onarrival(response);
+  }
+
+  if (pipe.finally_cb) {
+    pipe.finally_cb();
   }
 });
 
@@ -29,7 +35,11 @@ class MessagePipe {
     this.lastUpdate = Date.now();
     this.reqId = sha256.sha256(`${message.api}${this.lastUpdate}`).slice(0, 10);
     pipes[this.reqId] = this;
-    socket.send(JSON.stringify({ message, reqId: this.reqId, userpass: Cookie.get('userpass') }));
+    const userpass = Cookie.get('userpass');
+    if (!userpass) {
+      return;
+    }
+    socket.send(JSON.stringify({ message, reqId: this.reqId, userpass }));
   }
 
   onArrival(fn) {
@@ -41,11 +51,17 @@ class MessagePipe {
     this.onerror = fn;
     return this;
   }
+
+  finally(fn) {
+    this.finally_cb = fn;
+  }
 }
 
 const searchByCode = ({ code }) => new MessagePipe({ api: 'search_by_code', args: { code } });
 const getNewlyReleased = ({ page }) => new MessagePipe({ api: 'get_newly_released', args: { page } });
-const searchByActress = ({ actress, withProfile }) => new MessagePipe({ api: 'search_by_actress', args: { actress, withProfile } });
+const searchByActress = ({ actress }) => new MessagePipe({ api: 'search_by_actress', args: { actress } });
+const getActressProfile = ({ actress }) => new MessagePipe({ api: 'get_actress_profile', args: { actress } });
+const getAliases = ({ actress }) => new MessagePipe({ api: 'get_aliases', args: { actress } });
 const searchMagnet = ({ code }) => new MessagePipe({ api: 'search_magnet_by_code', args: { code } });
 
 export default {
@@ -54,4 +70,6 @@ export default {
   getNewlyReleased,
   searchByActress,
   searchMagnet,
+  getActressProfile,
+  getAliases,
 };
