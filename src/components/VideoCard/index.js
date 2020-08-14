@@ -40,7 +40,7 @@ export default (props) => {
       } else if (v.video_url.includes('hydrax.net')) {
         window.open(`${api.address}/#/iframe?video_url=${v.video_url}`);
       } else {
-        window.open(`${api.address}/redirect_to?url=${v.video_url}`);
+        window.open(`${api.address}/redirect_to?url=${v.video_url}`, '_blank');
       }
     } else {
       history.push(`/search/video?code=${v.code}`);
