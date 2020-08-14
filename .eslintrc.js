@@ -19,7 +19,7 @@ module.exports = {
     'react',
   ],
   rules: {
-    'linebreak-style': ['error', process.platform === 'win32' ? 'windows' : 'linux'],
+    'linebreak-style': ['error', process.platform === 'win32' ? 'windows' : 'unix'],
     'no-console': 'off',
     'react/jsx-filename-extension': [1, { extensions: ['.js', '.jsx'] }],
     'react/prop-types': [0, {}],
