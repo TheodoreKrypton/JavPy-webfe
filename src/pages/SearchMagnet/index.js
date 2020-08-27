@@ -8,9 +8,11 @@ import TableRow from '@material-ui/core/TableRow';
 import Button from '@material-ui/core/Button';
 import Alert from '@material-ui/lab/Alert';
 import Clipboard from 'clipboard';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import styles from './styles';
 import utils from '../../utils';
 import api from '../../api';
+import Error from '../../components/Error';
 
 // eslint-disable-next-line no-new
 new Clipboard('.btn');
@@ -18,12 +20,28 @@ new Clipboard('.btn');
 export default () => {
   const query = utils.useQuery();
 
+  const code = query.get('code');
+
   const [magnets, setMagnets] = React.useState([]);
+  const [loading, setLoading] = React.useState(true);
 
   const renderTable = () => {
     if (!magnets) {
       return <Alert severity="error">Sorry. Cannot find the requested resources.</Alert>;
     }
+
+    if (loading) {
+      return (
+        <div style={{ display: 'flex', justifyContent: 'center', marginTop: 20 }}>
+          <CircularProgress color="secondary" />
+        </div>
+      );
+    }
+
+    if (magnets.length === 0) {
+      return <Error />;
+    }
+
     return (
       <TableContainer
         component={Paper}
@@ -56,11 +74,12 @@ export default () => {
   };
 
   React.useEffect(() => {
-    const code = query.get('code');
     api.ws.searchMagnet({ code }).onArrival((rsp) => {
       setMagnets(rsp);
+    }).finally(() => {
+      setLoading(false);
     });
-  });
+  }, [code]);
 
   return renderTable();
 };

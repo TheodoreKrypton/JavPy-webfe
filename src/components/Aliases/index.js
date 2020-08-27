@@ -1,14 +1,13 @@
 import React from 'react';
 import Breadcrumbs from '@material-ui/core/Breadcrumbs';
 import Button from '@material-ui/core/Button';
-import { useHistory } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import api from '../../api';
 
 const aliasByActress = {};
 
 export default (props) => {
   const { actress } = props;
-  const history = useHistory();
 
   const aliasesCached = React.useMemo(() => aliasByActress[actress.toLowerCase()], [actress]);
   const [aliases, setAliases] = React.useState(aliasesCached || []);
@@ -41,13 +40,12 @@ export default (props) => {
     }}
     >
       <Breadcrumbs>
-        {aliases.map((name, i) => (
+        {aliases.map((name) => (
           <Button
-            key={i.toString()}
+            component={Link}
+            to={`/search/actress?actress=${name}`}
+            key={name}
             color="secondary"
-            onClick={() => {
-              history.push(`/search/actress?actress=${name}`);
-            }}
           >
             {name}
           </Button>

@@ -4,25 +4,6 @@ function useQuery() {
   return new URLSearchParams(useLocation().search);
 }
 
-const globalCache = {
-  page: {
-    new: {
-      page: 1,
-      videos: [],
-    },
-    searchActress: {
-      page: 1,
-      videos: [],
-    },
-  },
-  actress: {
-    videos: {},
-    actressProfile: {},
-    historyNames: {},
-  },
-  videos: {},
-};
-
 function getDocumentTop() {
   let scrollTop = 0;
   let bodyScrollTop = 0;
@@ -75,5 +56,5 @@ const onBottom = () => getScrollHeight()
   === getWindowHeight() + getDocumentTop();
 
 export default {
-  useQuery, globalCache, onBottom,
+  useQuery, onBottom,
 };

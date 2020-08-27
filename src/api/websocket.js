@@ -5,10 +5,19 @@ const socket = new WebSocket('ws://localhost:8081/ws/');
 
 const connectionEstablished = () => socket.readyState === 1;
 
-socket.addEventListener('open', () => {
-  // eslint-disable-next-line no-console
-  console.log('WS connection established');
-});
+const connectionStatus = {
+  connected: false,
+  server: '',
+};
+
+socket.onopen = () => {
+  connectionStatus.connected = true;
+  connectionStatus.server = socket.url;
+};
+
+socket.onclose = () => {
+  connectionStatus.connected = false;
+};
 
 const pipes = {};
 
@@ -67,6 +76,7 @@ const searchMagnet = ({ code }) => new MessagePipe({ api: 'search_magnet_by_code
 export default {
   searchByCode,
   connectionEstablished,
+  connectionStatus,
   getNewlyReleased,
   searchByActress,
   searchMagnet,

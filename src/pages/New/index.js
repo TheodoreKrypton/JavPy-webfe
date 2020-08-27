@@ -38,11 +38,12 @@ export default () => {
             });
           }
         });
-        videosBuffer.current = sortVideos(videos.current);
+        const sortedVideos = sortVideos(videos.current);
         if (loading.current) {
-          setVideosRendered((vr) => videosBuffer.current.slice(0, vr.length + VIDEOS_PER_PAGE));
+          setVideosRendered((vr) => sortedVideos.slice(0, vr.length + VIDEOS_PER_PAGE));
           loading.current = false;
         }
+        videosBuffer.current = sortedVideos;
       });
     } else {
       setVideosRendered((vr) => videosBuffer.current.slice(0, vr.length + VIDEOS_PER_PAGE));

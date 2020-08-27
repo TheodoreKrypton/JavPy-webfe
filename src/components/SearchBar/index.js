@@ -4,49 +4,45 @@ import InputBase from '@material-ui/core/InputBase';
 import HomeIcon from '@material-ui/icons/Home';
 import SearchIcon from '@material-ui/icons/Search';
 import Paper from '@material-ui/core/Paper';
+import { Link, useHistory } from 'react-router-dom';
 import useStyles from './styles';
+
+const getDestination = (kw) => {
+  if (kw === '') {
+    return '';
+  }
+  return /\d/.test(kw)
+    ? `/#/search/video?code=${kw}`
+    : `/#/search/actress?actress=${kw}`;
+};
 
 export default () => {
   const classes = useStyles();
+  const history = useHistory();
 
-  const [input, setInput] = React.useState('');
-
-  function handleSearch() {
-    const kw = input.trim();
-    if (kw === '') {
-      return;
-    }
-    window.location.href = /\d/.test(kw)
-      ? `/#/search/video?code=${kw}`
-      : `/#/search/actress?actress=${kw}&history_name=true`;
-  }
-
-  function handleGoHome() {
-    window.location.href = '/';
-  }
+  const [searchTerm, setSearchTerm] = React.useState('');
 
   return (
     <Paper className={classes.root}>
-      <IconButton
-        aria-label="home"
-        component="span"
-        className={classes.iconButton}
-        onClick={() => { handleGoHome(); }}
-      >
+      <IconButton component={Link} to="/" className={classes.iconButton}>
         <HomeIcon />
       </IconButton>
       <InputBase
         className={classes.input}
         placeholder="Search..."
-        value={input}
-        onChange={(event) => { setInput(event.target.value); }}
+        value={searchTerm}
+        onChange={(event) => { setSearchTerm(event.target.value); }}
         onKeyPress={(e) => {
           if (e.key === 'Enter') {
-            handleSearch();
+            history.push(getDestination(searchTerm.trim()));
           }
         }}
       />
-      <IconButton className={classes.iconButton} aria-label="search" onClick={() => handleSearch()}>
+      <IconButton
+        className={classes.iconButton}
+        component={Link}
+        to={() => getDestination(searchTerm.trim())}
+      >
         <SearchIcon />
       </IconButton>
     </Paper>
