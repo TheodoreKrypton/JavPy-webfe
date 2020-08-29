@@ -9,10 +9,6 @@ import Videos from '../../components/Videos';
 
 const VIDEOS_PER_PAGE = 24;
 
-const sortVideos = (vs) => Object.values(vs).sort(
-  (v1, v2) => Date.parse(v2.release_date) - Date.parse(v1.release_date),
-);
-
 const videosByActress = {};
 
 export default () => {
@@ -25,7 +21,7 @@ export default () => {
     return videosByActress[actress.toLowerCase()];
   }, [actress]);
 
-  const videosBuffer = React.useRef(sortVideos(videosOfActress));
+  const videosBuffer = React.useRef(utils.sortVideos(videosOfActress));
   const [videosRendered, setVideosRendered] = React.useState([]);
   const loading = React.useRef(false);
 
@@ -63,17 +59,10 @@ export default () => {
         if (!videosOfActress[video.code]) {
           videosOfActress[video.code] = video;
         } else {
-          Object.keys(video).forEach((key) => {
-            if (videosOfActress[video.code].actress.length === 0) {
-              videosOfActress[video.code].actress = video.actress;
-            }
-            if (!videosOfActress[video.code][key]) {
-              videosOfActress[video.code][key] = video[key];
-            }
-          });
+          videosOfActress[video.code] = utils.mergeVideos(videosOfActress[video.code], video);
         }
       });
-      videosBuffer.current = sortVideos(videosOfActress);
+      videosBuffer.current = utils.sortVideos(videosOfActress);
       if (loading.current) {
         loading.current = false;
         nextPage();

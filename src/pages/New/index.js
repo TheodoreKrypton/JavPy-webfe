@@ -5,10 +5,6 @@ import api from '../../api';
 
 const VIDEOS_PER_PAGE = 24;
 
-const sortVideos = (vs) => Object.values(vs).sort(
-  (v1, v2) => Date.parse(v2.release_date) - Date.parse(v1.release_date),
-);
-
 export default () => {
   const videos = React.useRef({});
   const page = React.useRef(0);
@@ -28,17 +24,10 @@ export default () => {
           if (videos.current[video.code] === undefined) {
             videos.current[video.code] = video;
           } else {
-            Object.keys(video).forEach((key) => {
-              if (videos.current[video.code].actress.length === 0) {
-                videos.current[video.code].actress = video.actress;
-              }
-              if (!videos.current[video.code][key]) {
-                videos.current[video.code][key] = video[key];
-              }
-            });
+            videos.current[video.code] = utils.mergeVideos(videos.current[video.code], video);
           }
         });
-        const sortedVideos = sortVideos(videos.current);
+        const sortedVideos = utils.sortVideos(videos.current);
         if (loading.current) {
           setVideosRendered((vr) => sortedVideos.slice(0, vr.length + VIDEOS_PER_PAGE));
           loading.current = false;

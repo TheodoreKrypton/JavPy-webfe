@@ -55,6 +55,27 @@ function getScrollHeight() {
 const onBottom = () => getScrollHeight()
   === getWindowHeight() + getDocumentTop();
 
+const mergeVideos = (oldv, newv) => {
+  Object.keys(oldv).forEach((k) => {
+    if (!oldv[k] && newv[k]) {
+      // eslint-disable-next-line no-param-reassign
+      oldv[k] = newv[k];
+    }
+  });
+  if (oldv.actress.length === 0) {
+    // eslint-disable-next-line no-param-reassign
+    oldv.actress = newv.actress;
+  }
+  return { ...oldv };
+};
+
+const sortVideos = (vs) => Object.values(vs).sort(
+  (v1, v2) => Date.parse(v2.release_date) - Date.parse(v1.release_date),
+);
+
 export default {
-  useQuery, onBottom,
+  useQuery,
+  onBottom,
+  mergeVideos,
+  sortVideos,
 };

@@ -6,7 +6,6 @@ import TableHead from '@material-ui/core/TableHead';
 import Paper from '@material-ui/core/Paper';
 import TableRow from '@material-ui/core/TableRow';
 import Button from '@material-ui/core/Button';
-import Alert from '@material-ui/lab/Alert';
 import Clipboard from 'clipboard';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import styles from './styles';
@@ -26,10 +25,6 @@ export default () => {
   const [loading, setLoading] = React.useState(true);
 
   const renderTable = () => {
-    if (!magnets) {
-      return <Alert severity="error">Sorry. Cannot find the requested resources.</Alert>;
-    }
-
     if (loading) {
       return (
         <div style={{ display: 'flex', justifyContent: 'center', marginTop: 20 }}>
@@ -75,8 +70,9 @@ export default () => {
 
   React.useEffect(() => {
     api.ws.searchMagnet({ code }).onArrival((rsp) => {
-      setMagnets(rsp);
-    }).finally(() => {
+      setMagnets((m) => m.concat(rsp));
+      setLoading(false);
+    }).onError(() => {
       setLoading(false);
     });
   }, [code]);

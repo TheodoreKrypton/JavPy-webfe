@@ -7,17 +7,6 @@ import LazyLoad from 'react-lazyload';
 import Chip from '@material-ui/core/Chip';
 import { Link } from 'react-router-dom';
 import useStyles from './styles';
-import api from '../../../api';
-
-const handleVideoClick = (videoUrl) => {
-  if (videoUrl.endsWith('.m3u8') || videoUrl.endsWith('.mp4')) {
-    window.open(`${api.address}/#/videoplayer?video_url=${videoUrl}`);
-  } else if (videoUrl.includes('hydrax.net')) {
-    window.open(`${api.address}/#/iframe?video_url=${videoUrl}`);
-  } else {
-    window.open(`${api.address}/redirect_to?url=${videoUrl}`, '_blank');
-  }
-};
 
 export default (props) => {
   const classes = useStyles();
@@ -46,20 +35,8 @@ export default (props) => {
   );
 
   return (
-    <>
-      {
-        video.video_url
-          ? (
-            <CardActionArea onClick={() => handleVideoClick(video.video_url)}>
-              {html}
-            </CardActionArea>
-          )
-          : (
-            <CardActionArea component={Link} to={`/search/video?code=${video.code}`}>
-              {html}
-            </CardActionArea>
-          )
-      }
-    </>
+    <CardActionArea component={Link} to={`/search/video?code=${video.code}`}>
+      {html}
+    </CardActionArea>
   );
 };

@@ -61,8 +61,6 @@ export default (props) => {
     );
   };
 
-  const getVideoUrlDomain = (url) => new URL(url).hostname;
-
   return (
     <Card className={classes.root}>
       <ActionArea video={video} />
@@ -71,7 +69,6 @@ export default (props) => {
         <Button component={Link} to={`/search/magnet?code=${video.code}`} size="small" color="secondary">
           MAGNET
         </Button>
-        <span className={classes.source}>{video.video_url ? getVideoUrlDomain(video.video_url) : ''}</span>
       </CardActions>
     </Card>
   );

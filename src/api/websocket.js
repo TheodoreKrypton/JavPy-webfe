@@ -72,6 +72,7 @@ const searchByActress = ({ actress }) => new MessagePipe({ api: 'search_by_actre
 const getActressProfile = ({ actress }) => new MessagePipe({ api: 'get_actress_profile', args: { actress } });
 const getAliases = ({ actress }) => new MessagePipe({ api: 'get_aliases', args: { actress } });
 const searchMagnet = ({ code }) => new MessagePipe({ api: 'search_magnet_by_code', args: { code } });
+const getBrief = ({ code }) => new MessagePipe({ api: 'get_brief', args: { code } });
 
 export default {
   searchByCode,
@@ -82,4 +83,5 @@ export default {
   searchMagnet,
   getActressProfile,
   getAliases,
+  getBrief,
 };
