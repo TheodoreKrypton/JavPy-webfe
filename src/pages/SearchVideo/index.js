@@ -1,5 +1,6 @@
 import React from 'react';
 import Button from '@material-ui/core/Button';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import VideoCard from '../../components/VideoCard';
 import api from '../../api';
 import utils from '../../utils';
@@ -22,7 +23,11 @@ export default () => {
   const code = query.get('code');
 
   const [brief, setBrief] = React.useState({
-    code: '', title: '', preview_img_url: '', actress: [], release_date: '',
+    code: '',
+    title: '',
+    preview_img_url: '',
+    actress: [],
+    release_date: '',
   });
   const [sources, setSources] = React.useState([]);
 
@@ -43,23 +48,31 @@ export default () => {
     });
   }, [code]);
 
+  const head = React.useMemo(() => (
+    <div style={{ display: 'flex', justifyContent: 'center' }}>
+      <VideoCard video={brief} />
+    </div>
+  ), [brief]);
+
   return (
     <>
+      {head}
       <div style={{ display: 'flex', justifyContent: 'center' }}>
-        <VideoCard video={brief} />
-
-      </div>
-      <div style={{ display: 'flex', justifyContent: 'center' }}>
-        {sources === null ? <Error />
-          : sources.map(
+        {(() => {
+          if (sources === null) {
+            return <Error />;
+          }
+          if (sources.length === 0) {
+            return <CircularProgress color="secondary" />;
+          }
+          return sources.map(
             (url) => (
-              <Button
-                onClick={() => handleVideoClick(url)}
-              >
+              <Button onClick={() => handleVideoClick(url)}>
                 {getVideoUrlDomain(url)}
               </Button>
             ),
-          )}
+          );
+        })()}
       </div>
     </>
   );

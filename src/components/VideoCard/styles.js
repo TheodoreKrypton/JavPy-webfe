@@ -5,11 +5,11 @@ export default makeStyles({
     width: 350,
     maxWidth: '80vw',
     margin: 8,
-    height: 400,
+    height: 430,
     background: 'rgba(255, 255, 255, 0.1)',
   },
   media: {
-    height: 200,
+    height: 385,
   },
   content: {
     poadding: 8,

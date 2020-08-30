@@ -13,15 +13,17 @@ export default (props) => {
 
   const { video } = props;
 
-  const html = (
+  return (
     <>
-      <LazyLoad>
-        <CardMedia
-          component="img"
-          className={classes.media}
-          image={video.preview_img_url}
-        />
-      </LazyLoad>
+      <CardActionArea component={Link} to={`/search/video?code=${video.code}`}>
+        <LazyLoad>
+          <CardMedia
+            component="img"
+            className={classes.media}
+            image={video.preview_img_url}
+          />
+        </LazyLoad>
+      </CardActionArea>
       <CardContent className={classes.content}>
         <Typography gutterBottom variant="h5" component="h2">
           {video.code}
@@ -32,11 +34,5 @@ export default (props) => {
         </Typography>
       </CardContent>
     </>
-  );
-
-  return (
-    <CardActionArea component={Link} to={`/search/video?code=${video.code}`}>
-      {html}
-    </CardActionArea>
   );
 };

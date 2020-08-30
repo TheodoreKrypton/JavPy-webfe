@@ -66,6 +66,14 @@ const mergeVideos = (oldv, newv) => {
     // eslint-disable-next-line no-param-reassign
     oldv.actress = newv.actress;
   }
+  if (newv.preview_img_url
+    && oldv.preview_img_url
+    && (oldv.preview_img_url.startsWith('https://jdbimgs.com')
+      || oldv.preview_img_url.includes('avgle.com'))
+  ) {
+    // eslint-disable-next-line no-param-reassign
+    oldv.preview_img_url = newv.preview_img_url;
+  }
   return { ...oldv };
 };
 
