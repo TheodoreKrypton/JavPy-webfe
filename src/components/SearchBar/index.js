@@ -12,8 +12,8 @@ const getDestination = (kw) => {
     return '';
   }
   return /\d/.test(kw)
-    ? `/#/search/video?code=${kw}`
-    : `/#/search/actress?actress=${kw}`;
+    ? `/search/video?code=${kw}`
+    : `/search/actress?actress=${kw}`;
 };
 
 export default () => {
