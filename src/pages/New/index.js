@@ -45,6 +45,7 @@ export default () => {
         nextPage(videosRendered.length);
       }
     };
+    window.ontouchmove = window.onwheel;
     if (videosRendered.length === 0) {
       nextPage(videosRendered.length);
     }
