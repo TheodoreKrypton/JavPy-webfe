@@ -1,7 +1,8 @@
 import sha256 from 'js-sha256';
 import Cookie from 'js-cookie';
+import utils from '../utils';
 
-const socket = new WebSocket('ws://localhost:8081/ws/');
+const socket = new WebSocket(`ws://${utils.address}/ws/`);
 
 const connectionEstablished = () => socket.readyState === 1;
 

@@ -3,12 +3,9 @@ import axios from 'axios';
 import Cookie from 'js-cookie';
 import sha256 from 'js-sha256';
 import ws from './websocket';
+import utils from '../utils';
 
-let address = `${window.location.protocol}//${window.location.hostname}:${window.location.port}`;
-
-if (process && process.env.NODE_ENV === 'development') {
-  address = `${window.location.protocol}//${window.location.hostname}:8081`;
-}
+const address = `${window.location.protocol}//${utils.address}`;
 
 const setUserpass = (val) => {
   Cookie.set('userpass', val);

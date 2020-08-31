@@ -81,9 +81,49 @@ const sortVideos = (vs) => Object.values(vs).sort(
   (v1, v2) => Date.parse(v2.release_date) - Date.parse(v1.release_date),
 );
 
+let address = `${window.location.hostname}:${window.location.port}`;
+
+if (process && process.env.NODE_ENV === 'development') {
+  address = `${window.location.hostname}:8081`;
+}
+
+const favourites = {
+  cache: (() => {
+    const temp = localStorage.getItem('favourites');
+    if (!temp) {
+      localStorage.setItem('favourites', JSON.stringify({ id: 0, values: {} }));
+    }
+    return JSON.parse(localStorage.getItem('favourites'));
+  })(),
+
+  add(url) {
+    if (this.cache[url] !== undefined) {
+      return;
+    }
+
+    this.cache.id += 1;
+    this.cache.values[url] = this.cache.id;
+    localStorage.setItem('favourites', JSON.stringify(this.cache));
+  },
+
+  remove(url) {
+    if (this.cache.values[url] === undefined) {
+      return;
+    }
+    delete this.cache.values[url];
+    localStorage.setItem('favourites', JSON.stringify(this.cache));
+  },
+
+  contains(url) {
+    return this.cache.values[url] !== undefined;
+  },
+};
+
 export default {
   useQuery,
   onBottom,
   mergeVideos,
   sortVideos,
+  address,
+  favourites,
 };

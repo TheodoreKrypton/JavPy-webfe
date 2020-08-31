@@ -16,6 +16,7 @@ import Login from './pages/Login';
 import VideoPlayer from './pages/VideoPlayer';
 import IFrame from './pages/IFrame';
 import TopArea from './components/TopArea';
+import Favourites from './pages/Favourites';
 
 export default withRouter(() => {
   const App = () => (
@@ -28,26 +29,27 @@ export default withRouter(() => {
       </Route>
       <Route path="/">
         <ThemeProvider theme={theme}>
-          <div>
-            <Login />
-            <TopArea />
-            <div style={{ position: 'absolute', top: 70, width: '100%' }}>
-              <Switch>
-                <Route path="/new">
-                  <New />
-                </Route>
-                <Route path="/search/video">
-                  <SearchVideo />
-                </Route>
-                <Route path="/search/actress">
-                  <SearchActress />
-                </Route>
-                <Route path="/search/magnet">
-                  <SearchMagnet />
-                </Route>
-                <Redirect path="/" to="/new" />
-              </Switch>
-            </div>
+          <Login />
+          <TopArea />
+          <div style={{ position: 'absolute', top: 70, width: '100%' }}>
+            <Switch>
+              <Route path="/new">
+                <New />
+              </Route>
+              <Route path="/search/video">
+                <SearchVideo />
+              </Route>
+              <Route path="/search/actress">
+                <SearchActress />
+              </Route>
+              <Route path="/search/magnet">
+                <SearchMagnet />
+              </Route>
+              <Route path="/favourites">
+                <Favourites />
+              </Route>
+              <Redirect path="/" to="/new" />
+            </Switch>
           </div>
         </ThemeProvider>
       </Route>
