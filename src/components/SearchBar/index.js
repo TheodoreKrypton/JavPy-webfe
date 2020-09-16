@@ -6,6 +6,8 @@ import SearchIcon from '@material-ui/icons/Search';
 import Paper from '@material-ui/core/Paper';
 import { Link, useHistory } from 'react-router-dom';
 import useStyles from './styles';
+import Config from '../Config';
+import FavouriteButton from '../FavouriteButton';
 
 const getDestination = (kw) => {
   if (kw === '') {
@@ -24,9 +26,11 @@ export default () => {
 
   return (
     <Paper className={classes.root}>
+      <Config />
       <IconButton component={Link} to="/" className={classes.iconButton}>
         <HomeIcon />
       </IconButton>
+      <FavouriteButton url={`${window.location.pathname}${window.location.hash}`} />
       <InputBase
         className={classes.input}
         placeholder="Search..."

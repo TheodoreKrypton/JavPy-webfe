@@ -4,12 +4,10 @@ export default makeStyles((theme) => ({
   root: {
     padding: '2px 4px',
     display: 'flex',
-    alignItems: 'center',
-    maxWidth: 400,
-    margin: '8px',
-    zIndex: '1',
-    position: 'sticky',
-    top: '8px',
+    maxWidth: 800,
+    position: 'fixed',
+    top: 8,
+    zIndex: 1,
   },
 
   input: {
@@ -19,10 +17,5 @@ export default makeStyles((theme) => ({
 
   iconButton: {
     padding: 10,
-  },
-
-  divider: {
-    height: 28,
-    margin: 4,
   },
 }));

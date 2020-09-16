@@ -6,6 +6,7 @@ import {
   Redirect,
 } from 'react-router-dom';
 import { withRouter } from 'react-router';
+import Grid from '@material-ui/core/Grid';
 import New from './pages/New';
 import './App.css';
 import theme from './theme';
@@ -15,7 +16,7 @@ import SearchMagnet from './pages/SearchMagnet';
 import Login from './pages/Login';
 import VideoPlayer from './pages/VideoPlayer';
 import IFrame from './pages/IFrame';
-import TopArea from './components/TopArea';
+import SearchBar from './components/SearchBar';
 import Favourites from './pages/Favourites';
 
 export default withRouter(() => {
@@ -30,7 +31,14 @@ export default withRouter(() => {
       <Route path="/">
         <ThemeProvider theme={theme}>
           <Login />
-          <TopArea />
+          <Grid
+            container
+            direction="row"
+            justify="center"
+            alignItems="center"
+          >
+            <SearchBar />
+          </Grid>
           <div style={{ position: 'absolute', top: 70, width: '100%' }}>
             <Switch>
               <Route path="/new">

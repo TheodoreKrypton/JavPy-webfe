@@ -1,9 +1,9 @@
 import React from 'react';
-import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
-import CardMedia from '@material-ui/core/CardMedia';
+import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import Skeleton from '@material-ui/lab/Skeleton';
+import Box from '@material-ui/core/Box';
+import Avatar from '@material-ui/core/Avatar';
 import useStyles from './styles';
 import api from '../../api';
 
@@ -42,21 +42,20 @@ export default (props) => {
 
   if (loading) {
     return (
-      <Card className={classes.root}>
-        <div className={classes.details}>
-          <CardContent className={classes.content}>
+      <Grid container justify="center">
+        <Grid container className={classes.root}>
+          <Grid container direction="column" xs={6}>
+            {([...new Array(4)]).map(() => (
+              <Grid item>
+                <Skeleton variant="text" width={100} />
+              </Grid>
+            ))}
+          </Grid>
+          <Grid xs={6}>
             <Skeleton variant="text" width={100} />
-            <Skeleton variant="text" width={100} />
-            <Skeleton variant="text" width={100} />
-            <Skeleton variant="text" width={100} />
-          </CardContent>
-        </div>
-        <CardMedia
-          className={classes.cover}
-        >
-          <Skeleton variant="rect" />
-        </CardMedia>
-      </Card>
+          </Grid>
+        </Grid>
+      </Grid>
     );
   }
 
@@ -65,31 +64,44 @@ export default (props) => {
   }
 
   return (
-    <Card className={classes.root}>
-      <div className={classes.details}>
-        <CardContent className={classes.content}>
-          <Typography component="h5" variant="h5">
-            {actress}
-          </Typography>
-          <Typography variant="subtitle1" color="textSecondary">
-            Birthdate:
-            {formatDate(profile.birth_date)}
-          </Typography>
-          <Typography variant="subtitle1" color="textSecondary">
-            Height:
-            {profile.height}
-          </Typography>
-          <Typography variant="subtitle1" color="textSecondary">
-            Weight:
-            {profile.weight}
-          </Typography>
-        </CardContent>
-      </div>
-      <CardMedia
-        component="img"
-        className={classes.cover}
-        image={profile.img}
-      />
-    </Card>
+    <Grid container justify="center">
+      <Grid container className={classes.root}>
+        <Grid container direction="column" xs={6}>
+          <Grid item>
+            <Typography component="h5" variant="h5" color="textPrimary">
+              {actress}
+            </Typography>
+          </Grid>
+          <Grid item>
+            <Typography variant="subtitle1" color="textSecondary">
+              Birthdate:
+              {formatDate(profile.birth_date)}
+            </Typography>
+          </Grid>
+          <Grid item>
+            <Typography variant="subtitle1" color="textSecondary">
+              Height:
+              {profile.height}
+            </Typography>
+          </Grid>
+          <Grid item>
+            <Typography variant="subtitle1" color="textSecondary">
+              Weight:
+              {profile.weight}
+            </Typography>
+          </Grid>
+        </Grid>
+        <Grid xs={6}>
+          <Box
+            border={3}
+            borderColor="secondary.main"
+            borderRadius={7}
+            className={classes.cover}
+          >
+            <Avatar variant="rounded" src={profile.img} className={classes.cover} />
+          </Box>
+        </Grid>
+      </Grid>
+    </Grid>
   );
 };

@@ -23,7 +23,6 @@ const comprehendUrl = (url) => {
         return [`video:   ${decodeURI(main.match(regexes.code)[1])}`, main];
       }
       if (main.startsWith('/search/actress')) {
-        console.log(main);
         return [`actress: ${decodeURI(main.match(regexes.actress)[1])}`, main];
       }
       if (main.startsWith('/search/magnet')) {

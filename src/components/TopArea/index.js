@@ -1,22 +1,33 @@
-import React from 'react';
-import Config from '../Config';
-import SearchBar from '../SearchBar';
-import FavouriteButton from '../FavouriteButton';
+// import React from 'react';
+// import Grid from '@material-ui/core/Grid';
 
-export default () => (
-  <table style={{ position: 'fixed', top: 0, zIndex: 1 }}>
-    <tbody>
-      <tr>
-        <td>
-          <Config />
-        </td>
-        <td>
-          <SearchBar />
-        </td>
-        <td>
-          <FavouriteButton url={`${window.location.pathname}${window.location.hash}`} />
-        </td>
-      </tr>
-    </tbody>
-  </table>
-);
+// import SearchBar from '../SearchBar';
+
+// import useStyles from './styles';
+
+// export default () => {
+//   const classes = useStyles();
+
+//   return (
+//     <Grid container className={classes.root}>
+//       <Grid item xs container>
+//         <Grid item>
+
+//         </Grid>
+//         <Grid item>
+
+//         </Grid>
+//       </Grid>
+//       <Grid
+//         item
+//         xs={10}
+//         justify="center"
+//         alignItems="center"
+//         container
+//       >
+//         <SearchBar />
+//       </Grid>
+//       <Grid item xs />
+//     </Grid>
+//   );
+// };
