@@ -22,6 +22,7 @@ const rules = {
     'no-console': 'off',
     'react/jsx-filename-extension': [1, { extensions: ['.js', '.jsx'] }],
     'react/prop-types': [0, {}],
+    'react/display-name': 'off',
   },
 }
 
