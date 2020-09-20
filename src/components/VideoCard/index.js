@@ -35,6 +35,7 @@ export default (props) => {
           to={`/search/actress?actress=${video.actress}`}
           size="small"
           color="secondary"
+          target="_blank"
         >
           {video.actress}
         </Button>
@@ -53,7 +54,7 @@ export default (props) => {
           {actress.map(
             (x) => {
               const xx = x.trim();
-              return <Button component={Link} to={`/search/actress?actress=${xx}`} style={{ display: 'block' }} key={xx}>{xx}</Button>;
+              return <Button component={Link} to={`/search/actress?actress=${xx}`} target="_blank" style={{ display: 'block' }} key={xx}>{xx}</Button>;
             },
           )}
         </Menu>
@@ -66,7 +67,7 @@ export default (props) => {
       <ActionArea video={video} />
       <CardActions className={classes.bottom}>
         {renderActress(video.actress)}
-        <Button component={Link} to={`/search/magnet?code=${video.code}`} size="small" color="secondary">
+        <Button component={Link} to={`/search/magnet?code=${video.code}`} target="_blank" size="small" color="secondary">
           MAGNET
         </Button>
       </CardActions>

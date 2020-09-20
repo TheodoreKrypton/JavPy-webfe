@@ -20,7 +20,7 @@ import SearchBar from './components/SearchBar';
 import Favourites from './pages/Favourites';
 
 export default withRouter(() => {
-  const App = () => (
+  const App = React.useMemo(() => (
     <Switch>
       <Route path="/videoplayer">
         <VideoPlayer />
@@ -62,7 +62,7 @@ export default withRouter(() => {
         </ThemeProvider>
       </Route>
     </Switch>
-  );
+  ), []);
 
-  return <App />;
+  return <>{App}</>;
 });

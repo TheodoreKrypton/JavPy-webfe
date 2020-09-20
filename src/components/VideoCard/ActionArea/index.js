@@ -15,7 +15,7 @@ export default (props) => {
 
   return (
     <>
-      <CardActionArea component={Link} to={`/search/video?code=${video.code}`}>
+      <CardActionArea component={Link} to={`/search/video?code=${video.code}`} target="_blank">
         <LazyLoad>
           <CardMedia
             component="img"
