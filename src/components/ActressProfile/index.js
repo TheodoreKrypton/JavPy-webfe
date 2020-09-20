@@ -45,8 +45,9 @@ export default (props) => {
       <Grid container justify="center">
         <Grid container className={classes.root}>
           <Grid container direction="column" xs={6}>
-            {([...new Array(4)]).map(() => (
-              <Grid item>
+            {([...new Array(4)]).map((_, i) => (
+              // eslint-disable-next-line react/no-array-index-key
+              <Grid item key={i}>
                 <Skeleton variant="text" width={100} />
               </Grid>
             ))}

@@ -19,7 +19,6 @@ const rules = {
   ],
   rules: {
     'linebreak-style': 'off',
-    "react/display-name": "off",
     'no-console': 'off',
     'react/jsx-filename-extension': [1, { extensions: ['.js', '.jsx'] }],
     'react/prop-types': [0, {}],
