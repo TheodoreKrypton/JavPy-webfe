@@ -29,7 +29,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "install": "npm run build"
+    "install": "CI=false npm run build"
   },
   "eslintConfig": {
     "extends": "react-app"
