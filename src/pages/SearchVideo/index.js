@@ -67,7 +67,7 @@ export default () => {
           }
           return sources.map(
             (url) => (
-              <Button onClick={() => handleVideoClick(url)}>
+              <Button key={url} onClick={() => handleVideoClick(url)}>
                 {getVideoUrlDomain(url)}
               </Button>
             ),
