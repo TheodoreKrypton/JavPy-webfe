@@ -2,7 +2,7 @@ import sha256 from 'js-sha256';
 import Cookie from 'js-cookie';
 import utils from '../utils';
 
-const wsProtocol = window.location.protocol === 'https://' ? 'wss' : 'ws';
+const wsProtocol = window.location.protocol === 'https:' ? 'wss' : 'ws';
 
 const socket = new WebSocket(`${wsProtocol}://${utils.address}/ws/`);
 
