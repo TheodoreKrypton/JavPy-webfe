@@ -43,8 +43,9 @@ export default () => {
           let res = [];
           if (s) {
             res = [...s, rsp.video_url];
+          } else {
+            res = [rsp.video_url];
           }
-          res = [rsp.video_url];
           return [...new Set(res)];
         });
       }
