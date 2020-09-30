@@ -12,97 +12,93 @@ const formatDate = (date) => {
     return '';
   }
   const d = new Date(date);
-  const ye = new Intl.DateTimeFormat('en', { year: 'numeric' }).format(d);
+  const yr = new Intl.DateTimeFormat('en', { year: 'numeric' }).format(d);
   const mo = new Intl.DateTimeFormat('en', { month: 'numeric' }).format(d);
-  const da = new Intl.DateTimeFormat('en', { day: '2-digit' }).format(d);
-  return `${ye}/${mo}/${da}`;
+  const dy = new Intl.DateTimeFormat('en', { day: '2-digit' }).format(d);
+  return `${yr}/${mo}/${dy}`;
 };
-
-const profileByActress = {};
 
 export default (props) => {
   const classes = useStyles();
 
   const { actress } = props;
 
-  const [profile, setProfile] = React.useState(profileByActress[actress.toLowerCase()] || null);
+  const [profile, setProfile] = React.useState(null);
   const [loading, setLoading] = React.useState(false);
 
   React.useEffect(() => {
     setLoading(true);
     api.ws.getActressProfile({ actress })
-      .onArrival((rsp) => {
-        profileByActress[actress.toLowerCase()] = rsp;
-        setProfile(rsp);
-      })
+      .onArrival(setProfile)
       .finally(() => {
         setLoading(false);
       });
   }, [actress]);
 
-  if (loading) {
+  const html = React.useMemo(() => {
+    if (loading) {
+      return (
+        <Grid container justify="center">
+          <Grid container className={classes.root}>
+            <Grid container direction="column" xs={6}>
+              {([...new Array(4)]).map((_, i) => (
+                // eslint-disable-next-line react/no-array-index-key
+                <Grid item key={i}>
+                  <Skeleton variant="text" width={100} />
+                </Grid>
+              ))}
+            </Grid>
+            <Grid xs={6}>
+              <Skeleton variant="text" width={100} />
+            </Grid>
+          </Grid>
+        </Grid>
+      );
+    } if (!profile) {
+      return <></>;
+    }
     return (
       <Grid container justify="center">
         <Grid container className={classes.root}>
           <Grid container direction="column" xs={6}>
-            {([...new Array(4)]).map((_, i) => (
-              // eslint-disable-next-line react/no-array-index-key
-              <Grid item key={i}>
-                <Skeleton variant="text" width={100} />
-              </Grid>
-            ))}
+            <Grid item>
+              <Typography component="h5" variant="h5" color="textPrimary">
+                {actress}
+              </Typography>
+            </Grid>
+            <Grid item>
+              <Typography variant="subtitle1" color="textSecondary">
+                Birthdate:
+                {formatDate(profile.birth_date)}
+              </Typography>
+            </Grid>
+            <Grid item>
+              <Typography variant="subtitle1" color="textSecondary">
+                Height:
+                {profile.height}
+              </Typography>
+            </Grid>
+            <Grid item>
+              <Typography variant="subtitle1" color="textSecondary">
+                Weight:
+                {profile.weight}
+              </Typography>
+            </Grid>
           </Grid>
           <Grid xs={6}>
-            <Skeleton variant="text" width={100} />
+            <Box
+              border={3}
+              borderColor="secondary.main"
+              borderRadius={7}
+              className={classes.cover}
+            >
+              <Avatar variant="rounded" src={profile.img} className={classes.cover} />
+            </Box>
           </Grid>
         </Grid>
       </Grid>
     );
-  }
+  }, [actress, classes.cover, classes.root, loading, profile]);
 
-  if (!profile) {
-    return <></>;
-  }
-
-  return (
-    <Grid container justify="center">
-      <Grid container className={classes.root}>
-        <Grid container direction="column" xs={6}>
-          <Grid item>
-            <Typography component="h5" variant="h5" color="textPrimary">
-              {actress}
-            </Typography>
-          </Grid>
-          <Grid item>
-            <Typography variant="subtitle1" color="textSecondary">
-              Birthdate:
-              {formatDate(profile.birth_date)}
-            </Typography>
-          </Grid>
-          <Grid item>
-            <Typography variant="subtitle1" color="textSecondary">
-              Height:
-              {profile.height}
-            </Typography>
-          </Grid>
-          <Grid item>
-            <Typography variant="subtitle1" color="textSecondary">
-              Weight:
-              {profile.weight}
-            </Typography>
-          </Grid>
-        </Grid>
-        <Grid xs={6}>
-          <Box
-            border={3}
-            borderColor="secondary.main"
-            borderRadius={7}
-            className={classes.cover}
-          >
-            <Avatar variant="rounded" src={profile.img} className={classes.cover} />
-          </Box>
-        </Grid>
-      </Grid>
-    </Grid>
-  );
+  return html;
 };

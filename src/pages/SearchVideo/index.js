@@ -39,7 +39,14 @@ export default () => {
     api.ws.searchByCode({ code }).onArrival((rsp) => {
       if (rsp) {
         setBrief((av0) => utils.mergeVideos(av0, rsp));
-        setSources((s) => s.concat(rsp.video_url));
+        setSources((s) => {
+          let res = [];
+          if (s) {
+            res = [...s, rsp.video_url];
+          }
+          res = [rsp.video_url];
+          return [...new Set(res)];
+        });
       }
     }).onError((reason) => {
       if (reason === 'not found') {
