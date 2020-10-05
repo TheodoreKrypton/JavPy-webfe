@@ -2,12 +2,12 @@ import React from 'react';
 import IconButton from '@material-ui/core/IconButton';
 import InputBase from '@material-ui/core/InputBase';
 import HomeIcon from '@material-ui/icons/Home';
-import SearchIcon from '@material-ui/icons/Search';
 import Paper from '@material-ui/core/Paper';
 import { Link, useHistory } from 'react-router-dom';
 import useStyles from './styles';
 import Config from '../Config';
 import FavouriteButton from '../FavouriteButton';
+import SearchActressByImage from '../SearchActressByImage';
 
 const getDestination = (kw) => {
   if (kw === '') {
@@ -30,6 +30,7 @@ export default () => {
       <IconButton component={Link} to="/" className={classes.iconButton}>
         <HomeIcon />
       </IconButton>
+
       <FavouriteButton url={`${window.location.pathname}${window.location.hash}`} />
       <InputBase
         className={classes.input}
@@ -42,13 +43,7 @@ export default () => {
           }
         }}
       />
-      <IconButton
-        className={classes.iconButton}
-        component={Link}
-        to={() => getDestination(searchTerm.trim())}
-      >
-        <SearchIcon />
-      </IconButton>
+      <SearchActressByImage />
     </Paper>
   );
 };

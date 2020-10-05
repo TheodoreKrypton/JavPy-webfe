@@ -10,6 +10,7 @@ coverage
 
 # production
 build
+zipped
 
 # misc
 .DS_Store

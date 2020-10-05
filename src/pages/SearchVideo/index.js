@@ -18,17 +18,19 @@ const handleVideoClick = (videoUrl) => {
   }
 };
 
+const originalBrief = {
+  code: '',
+  title: '',
+  preview_img_url: '',
+  actress: [],
+  release_date: '',
+};
+
 export default () => {
   const query = utils.useQuery();
   const code = query.get('code');
 
-  const [brief, setBrief] = React.useState({
-    code: '',
-    title: '',
-    preview_img_url: '',
-    actress: [],
-    release_date: '',
-  });
+  const [brief, setBrief] = React.useState(originalBrief);
   const [sources, setSources] = React.useState([]);
 
   React.useEffect(() => {
@@ -54,6 +56,11 @@ export default () => {
         setSources(null);
       }
     });
+  }, [code]);
+
+  React.useEffect(() => {
+    setBrief(originalBrief);
+    setSources([]);
   }, [code]);
 
   const head = React.useMemo(() => (

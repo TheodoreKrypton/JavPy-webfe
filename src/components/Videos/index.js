@@ -9,16 +9,14 @@ export default (props) => {
   const { videos } = props;
 
   const renderPage = () => (
-    <>
-      <Box
-        className={classes.root}
-        display="flex"
-        flexWrap="wrap"
-        justifyContent="center"
-      >
-        {videos.map((video, i) => <VideoCard key={i.toString()} video={video} />)}
-      </Box>
-    </>
+    <Box
+      className={classes.root}
+      display="flex"
+      flexWrap="wrap"
+      justifyContent="center"
+    >
+      {videos.map((video) => <VideoCard key={video.code} video={video} />)}
+    </Box>
   );
 
   return renderPage();

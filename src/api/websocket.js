@@ -27,7 +27,6 @@ const pipes = {};
 socket.addEventListener('message', (event) => {
   const { response, reqId } = JSON.parse(event.data);
   const pipe = pipes[reqId];
-  pipe.lastUpdate = Date.now();
 
   if (response === 'not found') {
     if (pipe.onerror) {
@@ -44,14 +43,20 @@ socket.addEventListener('message', (event) => {
 
 class MessagePipe {
   constructor(message) {
-    this.lastUpdate = Date.now();
-    this.reqId = sha256.sha256(`${message.api}${this.lastUpdate}`).slice(0, 10);
+    this.reqId = sha256.sha256(`${message.api}${Math.random()}`).slice(0, 10);
     pipes[this.reqId] = this;
     const userpass = Cookie.get('userpass');
     if (!userpass) {
       return;
     }
-    socket.send(JSON.stringify({ message, reqId: this.reqId, userpass }));
+
+    socket.send(JSON.stringify(
+      {
+        message,
+        reqId: this.reqId,
+        userpass,
+      },
+    ));
   }
 
   onArrival(fn) {
@@ -76,6 +81,7 @@ const getActressProfile = ({ actress }) => new MessagePipe({ api: 'get_actress_p
 const getAliases = ({ actress }) => new MessagePipe({ api: 'get_aliases', args: { actress } });
 const searchMagnet = ({ code }) => new MessagePipe({ api: 'search_magnet_by_code', args: { code } });
 const getBrief = ({ code }) => new MessagePipe({ api: 'get_brief', args: { code } });
+const searchActressByImage = ({ image }) => new MessagePipe({ api: 'search_actress_by_image', args: { image } });
 
 export default {
   searchByCode,
@@ -87,4 +93,5 @@ export default {
   getActressProfile,
   getAliases,
   getBrief,
+  searchActressByImage,
 };

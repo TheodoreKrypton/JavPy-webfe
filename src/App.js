@@ -18,6 +18,7 @@ import VideoPlayer from './pages/VideoPlayer';
 import IFrame from './pages/IFrame';
 import SearchBar from './components/SearchBar';
 import Favourites from './pages/Favourites';
+import Actresses from './pages/Actresses';
 
 export default withRouter(() => {
   const App = React.useMemo(() => (
@@ -55,6 +56,9 @@ export default withRouter(() => {
               </Route>
               <Route path="/favourites">
                 <Favourites />
+              </Route>
+              <Route path="/actresses">
+                <Actresses />
               </Route>
               <Redirect path="/" to="/new" />
             </Switch>

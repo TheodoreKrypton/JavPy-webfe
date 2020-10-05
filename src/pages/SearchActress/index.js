@@ -1,5 +1,6 @@
 import React from 'react';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import Grid from '@material-ui/core/Grid';
 import utils from '../../utils';
 import api from '../../api';
 import ActressProfile from '../../components/ActressProfile';
@@ -25,7 +26,11 @@ export default () => {
   const [videosRendered, setVideosRendered] = React.useState([]);
   const loading = React.useRef(false);
 
-  const actressProfile = React.useMemo(() => <ActressProfile actress={actress} />, [actress]);
+  const actressProfile = React.useMemo(() => (
+    <Grid container justify="center">
+      <ActressProfile actress={actress} />
+    </Grid>
+  ), [actress]);
   const aliases = React.useMemo(() => <Aliases actress={actress} />, [actress]);
   const videos = React.useMemo(() => {
     if (loading.current) {

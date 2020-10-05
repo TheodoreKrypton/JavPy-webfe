@@ -4,6 +4,7 @@ import Typography from '@material-ui/core/Typography';
 import Skeleton from '@material-ui/lab/Skeleton';
 import Box from '@material-ui/core/Box';
 import Avatar from '@material-ui/core/Avatar';
+import { Link } from 'react-router-dom';
 import useStyles from './styles';
 import api from '../../api';
 
@@ -40,15 +41,18 @@ export default (props) => {
       return (
         <Grid container justify="center">
           <Grid container className={classes.root}>
-            <Grid container direction="column" xs={6}>
-              {([...new Array(4)]).map((_, i) => (
+            <Grid container direction="column">
+              <Grid item xs={6}>
+                {actress}
+              </Grid>
+              {([...new Array(3)]).map((_, i) => (
                 // eslint-disable-next-line react/no-array-index-key
-                <Grid item key={i}>
+                <Grid item key={i} xs={6}>
                   <Skeleton variant="text" width={100} />
                 </Grid>
               ))}
             </Grid>
-            <Grid xs={6}>
+            <Grid item xs={6}>
               <Skeleton variant="text" width={100} />
             </Grid>
           </Grid>
@@ -58,9 +62,9 @@ export default (props) => {
       return <></>;
     }
     return (
-      <Grid container justify="center">
-        <Grid container className={classes.root}>
-          <Grid container direction="column" xs={6}>
+      <Grid container className={classes.root}>
+        <Grid item xs={6}>
+          <Grid container direction="column">
             <Grid item>
               <Typography component="h5" variant="h5" color="textPrimary">
                 {actress}
@@ -85,16 +89,23 @@ export default (props) => {
               </Typography>
             </Grid>
           </Grid>
-          <Grid xs={6}>
-            <Box
-              border={3}
-              borderColor="secondary.main"
-              borderRadius={7}
+        </Grid>
+        <Grid item xs={6}>
+          <Box
+            border={3}
+            borderColor="secondary.main"
+            borderRadius={7}
+            className={classes.cover}
+          >
+            <Avatar
+              variant="rounded"
+              src={profile.img}
               className={classes.cover}
-            >
-              <Avatar variant="rounded" src={profile.img} className={classes.cover} />
-            </Box>
-          </Grid>
+              component={Link}
+              to={`/search/actress?actress=${actress}`}
+              target="_blank"
+            />
+          </Box>
         </Grid>
       </Grid>
     );
