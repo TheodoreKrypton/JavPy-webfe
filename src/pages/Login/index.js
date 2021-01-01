@@ -12,14 +12,14 @@ export default () => {
   const [input, setInput] = React.useState('');
   const [open, setOpen] = React.useState(!api.hasUserpass());
 
-  const handleProceed = () => {
+  const handleProceed = React.useCallback(() => {
     api.authByPassword({ password: input }).then((rsp) => {
       if (rsp) {
         setOpen(false);
         window.location.reload();
       }
     });
-  };
+  }, [input]);
 
   return (
     <>
@@ -36,7 +36,7 @@ export default () => {
             type="password"
             color="secondary"
             value={input}
-            onChange={setInput}
+            onChange={(ev) => { setInput(ev.target.value); }}
             fullWidth
           />
         </DialogContent>
