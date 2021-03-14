@@ -11,7 +11,7 @@ const getVideoUrlDomain = (url) => new URL(url).hostname;
 const handleVideoClick = (videoUrl) => {
   if (videoUrl.endsWith('.m3u8') || videoUrl.endsWith('.mp4')) {
     window.open(`${api.address}/#/videoplayer?video_url=${videoUrl}`);
-  } else if (videoUrl.includes('hydrax.net')) {
+  } else if (videoUrl.includes('hydrax.net') || videoUrl.includes('playhydrax.com')) {
     window.open(`${api.address}/#/iframe?video_url=${videoUrl}`);
   } else {
     window.open(`${api.address}/redirect_to?url=${videoUrl}`, '_blank');
@@ -42,13 +42,11 @@ export default () => {
       if (rsp) {
         setBrief((av0) => utils.mergeVideos(av0, rsp));
         setSources((s) => {
-          let res = [];
-          if (s) {
-            res = [...s, rsp.video_url];
-          } else {
-            res = [rsp.video_url];
+          const srcLower = s.map((url) => url.toLowerCase());
+          if (srcLower.indexOf(rsp.video_url.toLowerCase()) !== -1) {
+            return s;
           }
-          return [...new Set(res)];
+          return [...s, rsp.video_url];
         });
       }
     }).onError((reason) => {
