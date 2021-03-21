@@ -10,42 +10,44 @@ import api from '../../api';
 
 export default () => {
   const [input, setInput] = React.useState('');
-  const [open, setOpen] = React.useState(!api.hasUserpass());
+  const open = React.useMemo(() => !api.hasUserpass(), []);
 
-  const handleProceed = React.useCallback(() => {
-    api.authByPassword({ password: input }).then((rsp) => {
-      if (rsp) {
-        setOpen(false);
-        window.location.reload();
-      }
-    });
-  }, [input]);
+  const handleProceed = React.useCallback((password) => {
+    if (api.hasUserpass()) {
+      return;
+    }
+    api.authByPassword({ password });
+  }, []);
 
-  return (
-    <>
-      <Dialog open={open} onClose={handleProceed}>
-        <DialogTitle>Login Required</DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            Leave it blank if you did not set a password.
-          </DialogContentText>
-          <TextField
-            autoFocus
-            margin="dense"
-            label="password"
-            type="password"
-            color="secondary"
-            value={input}
-            onChange={(ev) => { setInput(ev.target.value); }}
-            fullWidth
-          />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleProceed} color="secondary">
-            Proceed
-          </Button>
-        </DialogActions>
-      </Dialog>
-    </>
-  );
+  React.useEffect(() => {
+    handleProceed(null);
+  }, [handleProceed]);
+
+  const dialog = React.useMemo(() => (
+    <Dialog open={open} onClose={handleProceed(input)}>
+      <DialogTitle>Login Required</DialogTitle>
+      <DialogContent>
+        <DialogContentText>
+          Leave it blank if you did not set a password.
+        </DialogContentText>
+        <TextField
+          autoFocus
+          margin="dense"
+          label="password"
+          type="password"
+          color="secondary"
+          value={input}
+          onChange={(ev) => { setInput(ev.target.value); }}
+          fullWidth
+        />
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={handleProceed} color="secondary">
+          Proceed
+        </Button>
+      </DialogActions>
+    </Dialog>
+  ), [handleProceed, input, open]);
+
+  return dialog;
 };

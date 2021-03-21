@@ -15,8 +15,6 @@ const getUserpass = () => Cookie.get('userpass');
 
 const hasUserpass = () => Cookie.get('userpass') !== undefined;
 
-let refreshed = false;
-
 const pookie = async (url, data) => {
   const userpass = getUserpass();
   if (!userpass) {
@@ -37,23 +35,22 @@ const pookie = async (url, data) => {
   } catch (err) {
     if (!err.response || err.response.status === 400) {
       Cookie.remove('userpass');
-      if (!refreshed) {
-        refreshed = true;
-        window.location.reload();
-        refreshed = false;
-      }
+      window.location.reload();
     }
   }
   return null;
 };
 
 const authByPassword = async ({ password }) => {
-  const rsp = await axios.post(`${address}/auth_by_password`, { password: sha256.sha256(password) });
+  const rsp = await (password === null
+    ? axios.post(`${address}/is_public`)
+    : axios.post(`${address}/auth_by_password`, { password: sha256.sha256(password) })
+  );
   if (rsp && rsp.status === 200 && rsp.data) {
     setUserpass(rsp.data);
-    return true;
+    console.log(getUserpass());
+    window.location.reload();
   }
-  return false;
 };
 
 const getConfigurations = async () => {
